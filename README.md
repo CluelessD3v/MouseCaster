@@ -35,10 +35,28 @@ Updates MouseCaster object RayCastParams.FilterDescendantsInstances w/o overwrit
 `GetMouseTarget(theCurrentCamera: Camera, distanceScalar?: number): Instance`
 
 Ray casting function, shoots a ray from the mouse position into a set distance, returns whatever it intercepted if anything.
-*The distance scalar defaults to 1000 if not set*, this method **ignores the gui inset!** since it uses ScreenPointToRay to
+*The distance scalar defaults to 1000 studs if not set*, this method **ignores the gui inset!** since it uses ScreenPointToRay to
 get mouse location.
 
-### TODO
+
+## Example usage
+Simple, constant ray casting from the mouse that ignores the baseplate, if you wan’t to try this out, install the module and copy paste this code in a script in StarterCharacterScripts
+
+```lua
+local RunService = game:GetService('RunService')
+local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
+local newMouseCaster = MouseCaster.new()
+
+newMouseCaster:SetFilterType(Enum.RaycastFilterType.Blacklist)
+newMouseCaster:SetTargetFilterList({workspace.Baseplate})
+local camera = workspace.CurrentCamera
+
+RunService.Heartbeat:Connect(function()
+    print(newMouseCaster:GetMouseTarget(camera, 500))
+end)
+
+```
+## TODO STUFF
 - Add error throwing
 - Add method to add instances with a collection service tag
 - Add debug methods
