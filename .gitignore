@@ -4,5 +4,6 @@
 # Roblox Studio lock files
 /*.rbxlx.lock
 /*.rbxl.lock
-src/Server
-src/Client
+src/Server/*
+src/Client/*
+
