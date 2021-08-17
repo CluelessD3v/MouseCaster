@@ -1,6 +1,14 @@
 # Mouse Caster
 Roblox Utility ray casting module specifically for the mouse. I made this because I needed to filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
 
+I decided to make my own because current available modules intend to be either a wrapper or an enhanced Mouse API, **which is not my intention**; if you need that, please use this modules instead:
+
+[starmaq Custom Mouse Module](https://devforum.roblox.com/t/custom-mouse-module/1051363)
+
+[dark:sugnslaes PlayerMouse2, modern alternative to the legacy PlayerMouse](https://devforum.roblox.com/t/custom-mouse-module/1051363)
+
+Both, in my opinion are great Player Mouse alternatives.
+
 
 ## Installation
 Just copy paste the contents from the src/MouseCaster.lua into a module script. Put said module in Replicated storage.
@@ -56,11 +64,14 @@ RunService.Heartbeat:Connect(function()
 end)
 
 ```
-## TODO STUFF
+## TODO
 - Add error throwing
 - Add method to add instances with a collection service tag
 - Add debug methods
-  
+
+## Disclaimer
+This was done with a specific use in mind for my tile based RTS, basically I needed to ignore everything but the tiles, but that is not currently possible with the legacy API. Therefore don’t expect this module to be some sort wrapper or new mouse API in roids, it’s just a tool I found useful specifically for raycasting from the mouse and maybe you will too.
+
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
 
