@@ -1,6 +1,17 @@
 # Mouse Caster
-Roblox Utility ray casting module specifically for the mouse. I made this because I needed to filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
+Roblox Utility ray casting module specifically for the mouse. I made this because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
 
+<br>
+
+## Disclaimer 
+
+This was done with a specific use in mind for my tile based RTS, basically I needed to ignore everything but the tiles, but that is not currently possible with the legacy API. Therefore don’t expect this module to be some sort wrapper or new mouse API in roids, it’s just a tool I found useful specifically for raycasting from the mouse and maybe you will too.
+
+**This Module is actively in development as I add features to my game, but right now is very uncooked.**
+
+<br>
+
+## Similar modules
 I decided to make my own because current available modules intend to be either a wrapper or an enhanced Mouse API, **which is not my intention**; if you need that, please use this modules instead:
 
 [starmaq Custom Mouse Module](https://devforum.roblox.com/t/custom-mouse-module/1051363)
@@ -16,7 +27,15 @@ Just copy paste the contents from the src/MouseCaster.lua into a module script. 
 ## API
 
 ### Properties
-`RayCastParams`  RayCastParams object
+`DistanceScalar: number` Max distance the ray can travel in studs, defaults to 1000
+
+
+`RayCastParams: function`  RayCastParams object
+
+
+`Target: Instance` Identical to Mouse.Target in functionality, shoots a ray with and returns whatever **Instance** it intercepts, distance set by DistanceScalar property.
+
+<br>
 
 ### Methods
 
@@ -26,26 +45,35 @@ Constructs a new MouseCaster object, accepts **two** optional parameters:
 - The ray cast filter type, either blacklist or whitelist, *defaults to blacklist*
 - A table of instances to filter, *defaults to an empty table*
 
+<br>
+
 `SetFilterType(filterType: Enum.RayCastFilterType): void`
 
 functional way to set the ray cast filter type, again either:
 - blacklist
 - whitelist
 
+<br>
+
 `SetTargetFilterList(filteredInstancesList: table): void`
 
 functional way to set the Filter descendants list, **calling this on an existing filter list will overwrite it**.
+
+<br>
 
 `UpdateTargetFilter(newInclusionList:table): void`
 
 Updates MouseCaster object RayCastParams.FilterDescendantsInstances w/o overwriting previous values 
 
-`GetMouseTarget(theCurrentCamera: Camera, distanceScalar?: number): Instance`
+<br>
+
+`GetRaycastResult(theCurrentCamera: Camera, distanceScalar?: number): RaycastResult`
 
 Ray casting function, shoots a ray from the mouse position into a set distance, returns whatever it intercepted if anything.
 *The distance scalar defaults to 1000 studs if not set*, this method **ignores the gui inset!** since it uses ScreenPointToRay to
 get mouse location.
 
+<br>
 
 ## Example usage
 Simple, constant ray casting from the mouse that ignores the baseplate, if you wan’t to try this out, install the module and copy paste this code in a script in StarterCharacterScripts
@@ -55,7 +83,6 @@ local RunService = game:GetService('RunService')
 local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
 local newMouseCaster = MouseCaster.new()
 
-newMouseCaster:SetFilterType(Enum.RaycastFilterType.Blacklist)
 newMouseCaster:SetTargetFilterList({workspace.Baseplate})
 local camera = workspace.CurrentCamera
 
@@ -68,9 +95,6 @@ end)
 - Add error throwing
 - Add method to add instances with a collection service tag
 - Add debug methods
-
-## Disclaimer
-This was done with a specific use in mind for my tile based RTS, basically I needed to ignore everything but the tiles, but that is not currently possible with the legacy API. Therefore don’t expect this module to be some sort wrapper or new mouse API in roids, it’s just a tool I found useful specifically for raycasting from the mouse and maybe you will too.
 
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
