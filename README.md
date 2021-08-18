@@ -1,6 +1,20 @@
 # Mouse Caster
 Roblox Utility ray casting module specifically for the mouse. I made this because I needed to filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
 
+
+## DISCLAIMER -- ADDED 18/8/21 (DD/MM/YY)
+
+
+**THIS API IS VERY GREEN/UNCOOKED AND IS ACTIVELY IN DEVELOPMENT, AFTER SOME TESTING IN MY GAME I FOUND A FEW UN-INTENDED BEHAVIORS THAT ARE PRODUCT OF DESIGN FLAWS THAT WILL BE FIXED AS SOON AS POSIBLE, PLUS I AM NOT A GREAT SCRIPTER SO PLEASE BARE WITH ME**
+
+
+### Tracked Flaws/Issues that will be fixed in the next update
+- GetMouseTarget does not actually returns the target, but the ray cast result: Major oversight from my, should have done more testing of this
+- Lack of a "target" class member, I find unnecessary having a function that gets the target but not a member, might as well just make a property that does exactly that a la `Mouse.Target`
+- Lack of a filtering method for tagged objects: Not that this is hard to do, you can just unpack a tagged instances table in the filter function, that said the API could do that for you.
+
+**END DISCLAIMER**
+
 I decided to make my own because current available modules intend to be either a wrapper or an enhanced Mouse API, **which is not my intention**; if you need that, please use this modules instead:
 
 [starmaq Custom Mouse Module](https://devforum.roblox.com/t/custom-mouse-module/1051363)
