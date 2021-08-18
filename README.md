@@ -76,21 +76,19 @@ get mouse location.
 <br>
 
 ## Example usage
-Simple, constant ray casting from the mouse that ignores the baseplate, if you wan’t to try this out, install the module and copy paste this code in a script in StarterCharacterScripts
 
+### Simple, constant ray casting from the mouse that ignores **EVERYTHING BUT THE BasePlate**, 
 ```lua
 local RunService = game:GetService('RunService')
 local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
-local newMouseCaster = MouseCaster.new()
-
-newMouseCaster:SetTargetFilterList({workspace.Baseplate})
-local camera = workspace.CurrentCamera
+local newMouseCaster = MouseCaster.new(1500, Enum.RaycastFilterType.Whitelist, {workspace.Baseplate})
 
 RunService.Heartbeat:Connect(function()
-    print(newMouseCaster:GetMouseTarget(camera, 500))
+    print(newMouseCaster.Target())
 end)
-
 ```
+<br>
+
 ## TODO
 - Add error throwing
 - Add method to add instances with a collection service tag
