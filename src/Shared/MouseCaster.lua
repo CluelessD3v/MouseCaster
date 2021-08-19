@@ -12,7 +12,7 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
     self.DistanceScalar = distanceScalar or 1000
 
     self.RayCastParams = RaycastParams.new()
-    self.RayCastParams.FilterType = filterType or Enum.RaycastFilterType.Whitelist
+    self.RayCastParams.FilterType = filterType or Enum.RaycastFilterType.Blacklist
     self.RayCastParams.FilterDescendantsInstances = filteredInstancesList or {}
     
     
@@ -29,8 +29,8 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
 end
 
 -------------------- Public Methods --------------------
---> functioncal way to get the FilterDescendantsInstances () 
-function MouseCaster:PrintFilteredInstancesList()
+--> Small debug function to make sure the list is actually being updated, not like you cannot know by testing 
+function MouseCaster:PrintFilterList()
     print(self.RayCastParams.FilterDescendantsInstances) 
 end
 
