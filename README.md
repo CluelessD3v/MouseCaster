@@ -39,7 +39,7 @@ I wrote this module with a very specific use case in mind, which is current proj
 
 <br>
 
-## Similar modules
+## Full fledged mouse modules made by other developers
 I decided to make my own because current available modules intend to be either a wrapper or an enhanced Mouse API, **which is not my intention**; if you need that, please use this modules instead:
 
 [starmaq Custom Mouse Module](https://devforum.roblox.com/t/custom-mouse-module/1051363)
