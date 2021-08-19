@@ -1,11 +1,39 @@
 # Mouse Caster
-Roblox Utility ray casting module specifically for the mouse. I made this because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
+Roblox Utility ray casting module specifically for the mouse. I am developing because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
+
+Added to the above; I also think that not having a modern, convenient Mouse API is in my opinion no bueno, simple example is attempting to raycast with the mouse w/o using the legacy mouse API.
+
+```lua
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local MouseLocation = UserInputService:GetMouseLocation()
+local camera = workspace:CurrentCamera
+local unitRay = camera:ScreenPointToRay(MouseLocation().X, MouseLocation().Y)
+
+local distanceScalar = 500
+
+local raycastParams = RaycastParams.new()
+raycastParams.FilterDescendantsInstances = {workspace.Baseplate}
+
+local target = nil
+
+RunService.Heartbeat:Connect(function()
+    target = workspace:Raycast(UnitRay.Origin, UnitRay.Direction * distanceScalar, raycastParams)
+end)
+
+```
+Although this is some simple code, it is definitely not beginner friendly (although if you are here, you probably are not a beginner), and lazy developers like me dread having to write boiler plate code
+
+Not only that, but having to write this much code, at least in my opinion is a regression when you can just do
+`Mouse.Target` with the legacy API...
+
+Now, that said, I am not at all trying to make my own Mouse Wrapper, which takes us to.
 
 <br>
 
 ## Disclaimer 
-
-This was done with a specific use in mind for my tile based RTS, basically I needed to ignore everything but the tiles, but that is not currently possible with the legacy API. Therefore don’t expect this module to be some sort wrapper or new mouse API in roids, it’s just a tool I found useful specifically for raycasting from the mouse and maybe you will too.
+I wrote this module with a very specific use case in mind, which is current project, a tile based RTS, I needed a ray cast function that allowed me to Ignore everything but Tiles. hence why this is not an attempt of a new Mouse API in roids (but it can very well end up being that, it all depends in the needs of my game) or something like that, I don’t think I’m nearly as good of a scripter to pull that off, if you need a full fledged mouse module, here are some options I found to be great:
 
 **This Module is actively in development as I add features to my game, but right now is very uncooked.**
 
@@ -108,3 +136,5 @@ end)
 Discord: CluelessDev(Quique)#5459
 
 Youtube: [CluelessDev](https://www.youtube.com/channel/UCViY5D5-aR-Gi-HBf4dg5zQ)
+
+
