@@ -6,5 +6,4 @@
 /*.rbxl.lock
 src/Server/*
 src/Client/*
-src/Shared/*
 /.project.json

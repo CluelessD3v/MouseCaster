@@ -66,7 +66,7 @@ function MouseCaster:UpdateTargetFilter(newInclusionList:table)
         table.insert(currentFilterList, instance)
     end
 
-    self.RayCastParams.FilterDescendantsInstances = currentFilterList
+    self.RayCastParams.FilterDescendantsInstances = currentFilterList --> I think this is redundant AF... //TODO FIXCON3 TEST THIS 
 end
 
 

@@ -22,7 +22,7 @@ Both, in my opinion are great Player Mouse alternatives.
 
 
 ## Installation
-Just copy paste the contents from the src/MouseCaster.lua into a module script. Put said module in Replicated storage.
+Just copy paste the contents from the src/Shared/MouseCaster.lua into a module script. Put said module in Replicated storage.
 
 ## API
 
