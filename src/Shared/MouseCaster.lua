@@ -11,6 +11,11 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
     self.Camera = workspace.CurrentCamera
     self.DistanceScalar = distanceScalar or 1000
 
+    self.RayCastParams = RaycastParams.new()
+    self.RayCastParams.FilterType = filterType or Enum.RaycastFilterType.Whitelist
+    self.RayCastParams.FilterDescendantsInstances = filteredInstancesList or {}
+    
+    
     self.Target = function()
         local UnitRay = self.Camera:ScreenPointToRay(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
         distanceScalar = distanceScalar or 1000
@@ -19,10 +24,7 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
             return target.Instance
         end
     end
-
-    self.RayCastParams = RaycastParams.new()
-    self.RayCastParams.FilterType = filterType or Enum.RaycastFilterType.Whitelist
-    self.RayCastParams.FilterDescendantsInstances = filteredInstancesList or {}
+    
     return self
 end
 
