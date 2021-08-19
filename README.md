@@ -99,8 +99,8 @@ end)
 
 ## TODO
 - Add error throwing
-- Add method to add instances with a collection service tag
 - Add debug methods
+- Add method to remove instances from the target filter
 
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
