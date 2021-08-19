@@ -27,6 +27,8 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 ## API
 
 ### Properties
+`Camera: Camera` Reference to the workspace current camera
+
 `DistanceScalar: number` Max distance the ray can travel in studs, defaults to 1000
 
 
