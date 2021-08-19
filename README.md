@@ -125,12 +125,17 @@ RunService.Heartbeat:Connect(function()
     print(newMouseCaster.Target())
 end)
 ```
+
+While I come up with more examples, keep in mind that most methods are just filter methods that behave exactly like  `self.RayCastParams.FilterDescendantsInstances`, just pass a table of instances to the filter methods and you are set
+
 <br>
 
 ## TODO
 - Add error throwing
 - Add debug methods
 - Add method to remove instances from the target filter
+- Add more examples
+
 
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
