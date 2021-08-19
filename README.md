@@ -67,6 +67,14 @@ Updates MouseCaster object RayCastParams.FilterDescendantsInstances w/o overwrit
 
 <br>
 
+`UpdateTargetFilterFromTags(tagsList: table): void`
+
+updates the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values
+
+**values must be strings!**
+
+<br>
+
 `GetRaycastResult(theCurrentCamera: Camera, distanceScalar?: number): RaycastResult`
 
 Ray casting function, shoots a ray from the mouse position into a set distance, returns whatever it intercepted if anything.
