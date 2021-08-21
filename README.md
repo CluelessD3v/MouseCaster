@@ -212,6 +212,9 @@ While I come up with more examples, keep in mind that most methods are just filt
 
 <br>
 
+## Credits
+Credit to discord user Bearosama, he wrote the current Update methods implementation, mine was a hot mess.
+
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
 
