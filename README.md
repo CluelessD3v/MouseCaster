@@ -52,6 +52,24 @@ Both, in my opinion are great Player Mouse alternatives.
 ## Installation
 Just copy paste the contents from the src/Shared/MouseCaster.lua into a module script. Put said module in Replicated storage.
 
+<br>
+
+## Current Capabilities
+- Raycast from the mouse using ScreenPointToRay (ignores Gui Inset)
+- Capable of filtering either multiple or single instances
+- support for CollectionService tags, mass filter tagged instances (Note: this is off course, more expensive)
+- Mimics legacy Mouse API: Call MouseCaster.Target() to ray cast
+
+<br>
+
+## TODO
+- Add error throwing
+- Add debug methods?
+- Add method to remove instances from the target filter
+- Add more examples to API
+
+<br>
+
 ## API
 
 ### Properties
@@ -63,7 +81,7 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 `RayCastParams: function`  RayCastParams object
 
 
-`Target: Instance` Identical to Mouse.Target in functionality, shoots a ray with and returns whatever **Instance** it intercepts, distance set by DistanceScalar property.
+`Target(): Instance` Identical to Mouse.Target in functionality, shoots a ray with and returns whatever **Instance** it intercepts, distance set by DistanceScalar property. Call as: **MouseCaster.Target()** else it will error.
 
 <br>
 
@@ -93,15 +111,7 @@ functional way to set the Filter descendants list, **calling this on an existing
 
 `UpdateTargetFilter(newInclusionList:table): void`
 
-Updates MouseCaster object RayCastParams.FilterDescendantsInstances w/o overwriting previous values 
-
-<br>
-
-`UpdateTargetFilterFromTags(tagsList: table): void`
-
-updates the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values
-
-**values must be strings!**
+Updates MouseCaster object RayCastParams.FilterDescendantsInstances w/o overwriting previous values, **this method ignores duplicated values Automatically**
 
 <br>
 
@@ -110,6 +120,24 @@ updates the instance filter by Adding all instances with the given tags of the t
 Ray casting function, shoots a ray from the mouse position into a set distance, returns whatever it intercepted if anything.
 *The distance scalar defaults to 1000 studs if not set*, this method **ignores the gui inset!** since it uses ScreenPointToRay to
 get mouse location.
+
+<br>
+
+### CollectionService oriented methods
+
+NOTE: *you can mimic these methods by spam calling UpdateTargetFilter() and passing CollectionService:GetTagged() tables to it.* **also; table values must be strings for these methods!**
+
+
+`SetTargetFilterFromTags(tagsList: table)`
+
+Adds all instances with the given tags of the tag list in the ray cast filter, calling this on an existing filter list will overwrite it. 
+
+<br>
+
+`UpdateTargetFilterFromTags(tagsList: table): void`
+
+A more lazier, albeit expensive way to update the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values
+**this method ignores duplicated values Automatically**
 
 <br>
 
@@ -129,13 +157,6 @@ end)
 While I come up with more examples, keep in mind that most methods are just filter methods that behave exactly like  `self.RayCastParams.FilterDescendantsInstances`, just pass a table of instances to the filter methods and you are set
 
 <br>
-
-## TODO
-- Add error throwing
-- Add debug methods
-- Add method to remove instances from the target filter
-- Add more examples
-
 
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
