@@ -136,7 +136,7 @@ Adds all instances with the given tags of the tag list in the ray cast filter, c
 
 `UpdateTargetFilterFromTags(tagsList: table): void`
 
-A more lazier, albeit expensive way to update the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values
+Adds all instances with the given tags of the tag list into the ray cast filter w/o overwriting previous values
 **this method ignores duplicated values Automatically**
 
 <br>
@@ -207,8 +207,6 @@ RunService.Heartbeat:Connect(function()
 end)
 
 ```
-
-
 
 While I come up with more examples, keep in mind that most methods are just filter methods that behave exactly like  `self.RayCastParams.FilterDescendantsInstances`, just pass a table of instances to the filter methods and you are set
 
