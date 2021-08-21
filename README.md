@@ -1,5 +1,5 @@
 # Mouse Caster
-Roblox Utility ray casting module specifically for the mouse. I am developing because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
+Roblox Utility ray casting module specifically for the mouse. I am developing this library because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
 
 Added to the above; I also think that not having a modern, convenient Mouse API is in my opinion no bueno, simple example is attempting to raycast with the mouse w/o using the legacy mouse API.
 
