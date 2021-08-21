@@ -103,7 +103,7 @@ functional way to set the ray cast filter type, again either:
 
 <br>
 
-`SetTargetFilterList(filteredInstancesList: table): void`
+`SetTargetFilter(filteredInstancesList: table): void`
 
 functional way to set the Filter descendants list, **calling this on an existing filter list will overwrite it**.
 
