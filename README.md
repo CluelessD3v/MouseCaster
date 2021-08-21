@@ -155,7 +155,7 @@ RunService.Heartbeat:Connect(function()
     print(newMouseCaster.Target())
 end)
 ```
-## Pseudo RTS tile based map example in which assets are spawned on top of tiles, ALL BUT THE TILES are ignored in this example
+## Pseudo RTS tile based map example in which assets are spawned on top of tiles, EVERYTHING BUT THE TILES are ignored by the ray cast in this example
 
 ```lua
 -- Server
