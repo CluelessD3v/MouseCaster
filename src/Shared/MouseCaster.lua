@@ -41,7 +41,7 @@ end
 
 
 --> functional way to set the Filter descendants list, calling this on an existing filter list will overwrite it.
-function MouseCaster:SetTargetFilterList(filterList: table)
+function MouseCaster:SetTargetFilter(filterList: table)
     self.RayCastParams.FilterDescendantsInstances = filterList
 end
 

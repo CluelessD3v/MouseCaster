@@ -143,7 +143,7 @@ A more lazier, albeit expensive way to update the instance filter by Adding all 
 
 ## Example usage
 
-### Simple, constant ray casting from the mouse that ignores **EVERYTHING BUT THE BasePlate**, 
+## Simple, constant ray casting from the mouse that ignores **EVERYTHING BUT THE BasePlate**, 
 ```lua
 local RunService = game:GetService('RunService')
 local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
@@ -153,6 +153,62 @@ RunService.Heartbeat:Connect(function()
     print(newMouseCaster.Target())
 end)
 ```
+## Tile map example in which assets are spawned on top of tiles, and they are ignored
+
+```lua
+-- Server
+local CollectionService = game:GetService('CollectionService')
+
+
+-- Generating 4x4 tile map
+for x = 1, 4 do
+    for z = 1, 4 do
+        local tile = Instance.new("Part")
+        tile.Size = Vector3.new(4,1,4)
+        -- tile.Name = "Tile"..tostring(x..z)
+        tile.Name = "Tile"
+        tile.Position = Vector3.new(tile.Size.X * x, 4, tile.Size.Z * z)
+        tile.Anchored = true
+        CollectionService:AddTag(tile, "Tile")
+        tile.Parent = workspace
+    end
+end
+
+-- Spawning props on top of tiles
+for _, tile in ipairs(CollectionService:GetTagged("Tile")) do
+    local Prop = Instance.new("Part")
+    Prop.Size = Vector3.new(2,2,2)
+    Prop.Name = "TestAsset"
+    Prop.Anchored = true
+
+    CollectionService:AddTag(Prop, "Prop")
+    
+    Prop.BrickColor = BrickColor.new("Really red")
+    local yOffset = tile.Size.Y/2 + Prop.Size.Y/2 
+    Prop.Position = tile.Position + Vector3.new(0, yOffset, 0) 
+    Prop.Parent = tile
+end
+
+-- Local script
+local RunService = game:GetService('RunService')
+local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
+local newMouseCaster = MouseCaster.new(1500)
+local localPlayer = game:GetService('Players').LocalPlayer
+
+-- show casing usage of filtering API: note that you can combine both CS and regular filter methods w/o problem
+
+-- Adding default scene instances and character to the target filter
+newMouseCaster:SetTargetFilter({workspace.Baseplate, workspace.SpawnLocation, localPlayer.Character }) 
+newMouseCaster:UpdateTargetFilterFromTags({"Prop"}) --> ignoring props so only tiles are detected
+
+-- Will ignore everything but the tiles
+RunService.Heartbeat:Connect(function()
+    print(newMouseCaster.Target())
+end)
+
+```
+
+
 
 While I come up with more examples, keep in mind that most methods are just filter methods that behave exactly like  `self.RayCastParams.FilterDescendantsInstances`, just pass a table of instances to the filter methods and you are set
 
