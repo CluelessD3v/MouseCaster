@@ -69,7 +69,21 @@ function MouseCaster:UpdateTargetFilter(newInclusionList:table)
         table.insert(currentFilterList, newInstance)
     end
 
-    self.RayCastParams.FilterDescendantsInstances = currentFilterList --> I think these are redundant AF... //TODO FIXCON3 TEST THIS 
+    self.RayCastParams.FilterDescendantsInstances = currentFilterList 
+end
+
+--> Updates the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values. IGNORE DUPLICATES!
+function MouseCaster:UpdateTargetFilterFromTags(tagsTable:table)
+    local currentFilterList = self.RayCastParams.FilterDescendantsInstances
+
+    for _, tag in ipairs(tagsTable) do
+        for _, taggedInstance in ipairs(CollectionService:GetTagged(tag)) do
+            if table.find(currentFilterList, taggedInstance) then continue end
+            table.insert(currentFilterList, taggedInstance)
+        end 
+    end
+
+    self.RayCastParams.FilterDescendantsInstances = currentFilterList 
 end
 
 --> returns Raycast result (if any)
