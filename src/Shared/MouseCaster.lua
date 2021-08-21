@@ -60,25 +60,13 @@ function MouseCaster:SetTargetFilterFromTags(taglist: table)
     self.RayCastParams.FilterDescendantsInstances = filterList
 end
 
---> Updates RayCastParams.FilterDescendantsInstances w/o overwriting previous values IGNORE DUPLICATES!
+-- --> Updates RayCastParams.FilterDescendantsInstances w/o overwriting previous values IGNORE DUPLICATES!
 function MouseCaster:UpdateTargetFilter(newInclusionList:table)
     local currentFilterList = self.RayCastParams.FilterDescendantsInstances
-    local isDuplicate = false
 
     for _, newInstance in ipairs(newInclusionList) do
-        print(newInstance)
-
-        for _, currentInstance in ipairs(currentFilterList) do
-            if newInstance.Name == currentInstance.Name then 
-                isDuplicate = true
-                break 
-            end
-        end
-
-        if not isDuplicate then
-            table.insert(currentFilterList, newInstance )
-            isDuplicate = false
-        end
+        if table.find(currentFilterList, newInstance) then continue end
+        table.insert(currentFilterList, newInstance)
     end
 
     self.RayCastParams.FilterDescendantsInstances = currentFilterList --> I think these are redundant AF... //TODO FIXCON3 TEST THIS 
