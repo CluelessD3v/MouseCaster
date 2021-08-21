@@ -46,7 +46,7 @@ function MouseCaster:SetTargetFilterList(filterList: table)
 end
 
 --> Adds all instances with the given tags of the tag list in the ray cast filter, calling this on an existing filter list will overwrite it.
-function MouseCaster:SetTargetFilterListFromTags(taglist: table)
+function MouseCaster:SetTargetFilterFromTags(taglist: table)
     local filterList = {}
 
     for _, tag in ipairs(taglist) do
@@ -60,15 +60,27 @@ function MouseCaster:SetTargetFilterListFromTags(taglist: table)
     self.RayCastParams.FilterDescendantsInstances = filterList
 end
 
---> Updates RayCastParams.FilterDescendantsInstances w/o overwriting previous values 
+--> Updates RayCastParams.FilterDescendantsInstances w/o overwriting previous values IGNORE DUPLICATES!
 function MouseCaster:UpdateTargetFilter(newInclusionList:table)
     local currentFilterList = self.RayCastParams.FilterDescendantsInstances
+    local isDuplicate = false
 
-    for _, instance in ipairs(newInclusionList) do
-        
-        table.insert(currentFilterList, instance)
+    for _, newInstance in ipairs(newInclusionList) do
+        print(newInstance)
+
+        for _, currentInstance in ipairs(currentFilterList) do
+            if newInstance.Name == currentInstance.Name then 
+                isDuplicate = true
+                break 
+            end
+        end
+
+        if not isDuplicate then
+            table.insert(currentFilterList, newInstance )
+            isDuplicate = false
+        end
     end
-    
+
     self.RayCastParams.FilterDescendantsInstances = currentFilterList --> I think these are redundant AF... //TODO FIXCON3 TEST THIS 
 end
 
