@@ -57,7 +57,7 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 ## Current Capabilities
 - Raycast from the mouse using ScreenPointToRay (ignores Gui Inset)
 - Capable of filtering either multiple or single instances
-- support for CollectionService tags, mass filter tagged instances (Note: this is off course, more expensive)
+- Support for CollectionService tags, mass filter tagged instances (this is off course, more expensive, but useful for lazy devs like me that cannot even reference Collection service, LOL)
 - Mimics legacy Mouse API: Call MouseCaster.Target() to ray cast
 
 <br>
@@ -81,7 +81,7 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 `RayCastParams: function`  RayCastParams object
 
 
-`Target(): Instance` Identical to Mouse.Target in functionality, shoots a ray with and returns whatever **Instance** it intercepts, distance set by DistanceScalar property. Call as: **MouseCaster.Target()** else it will error.
+`Target(): Instance` Identical to Mouse.Target in functionality, shoots a ray using Workspace:Raycast() and returns whatever **Instance** it intercepts, the max distance set by the DistanceScalar property. **MUST CALL AS**: **MouseCaster.Target()** else it will error.
 
 <br>
 
@@ -143,7 +143,7 @@ Adds all instances with the given tags of the tag list into the ray cast filter 
 
 ## Example usage
 
-**assuming you have Mouse caster installed in replicated storage, you can just copy paste this examples and they will work out of the box**
+**assuming you have Mouse caster installed in replicated storage, you can just copy paste these examples and they will work out of the box**
 
 ## Simple, constant ray casting from the mouse that ignores **EVERYTHING BUT THE BasePlate**, 
 ```lua
