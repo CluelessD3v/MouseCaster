@@ -143,6 +143,8 @@ Adds all instances with the given tags of the tag list into the ray cast filter 
 
 ## Example usage
 
+**assuming you have Mouse caster installed in replicated storage, you can just copy paste this examples and they will work out of the box**
+
 ## Simple, constant ray casting from the mouse that ignores **EVERYTHING BUT THE BasePlate**, 
 ```lua
 local RunService = game:GetService('RunService')
@@ -153,7 +155,7 @@ RunService.Heartbeat:Connect(function()
     print(newMouseCaster.Target())
 end)
 ```
-## Tile map example in which assets are spawned on top of tiles, and they are ignored
+## Pseudo RTS tile based map example in which assets are spawned on top of tiles, ALL BUT THE TILES are ignored in this example
 
 ```lua
 -- Server
