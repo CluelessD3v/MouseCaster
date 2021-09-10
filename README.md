@@ -1,4 +1,5 @@
 # Mouse Caster
+
 Roblox Utility ray casting module specifically for the mouse. I am developing this library because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
 
 Added to the above; I also think that not having a modern, convenient Mouse API is in my opinion no bueno, simple example is attempting to raycast with the mouse w/o using the legacy mouse API.
@@ -34,6 +35,11 @@ Now, that said, I am not at all trying to make my own Mouse Wrapper, which takes
 
 ## Disclaimer 
 I wrote this module with a very specific use case in mind, which is current project, a tile based RTS, I needed a ray cast function that allowed me to Ignore everything but Tiles. hence why this is not an attempt of a new Mouse API in roids (but it can very well end up being that, it all depends in the needs of my game) or something like that, I don’t think I’m nearly as good of a scripter to pull that off, if you need a full fledged mouse module, here are some options I found to be great:
+
+## Disclaimer 2
+As Off 09/10/21 (DD/MM/YY) the API was re-written so update methods are not as **criminally slow** as they were. there should
+not be any incompatible changes but if you spot one be sure to let me know.
+
 
 **This Module is actively in development as I add features to my game, but right now is very uncooked.**
 
@@ -134,7 +140,7 @@ Adds all instances with the given tags of the tag list in the ray cast filter, c
 
 <br>
 
-`UpdateTargetFilterFromTags(tagsList: table): void`
+`UpdateTargetFilterFromTags(): void`
 
 Adds all instances with the given tags of the tag list into the ray cast filter w/o overwriting previous values
 **this method ignores duplicated values Automatically**
@@ -165,12 +171,16 @@ local CollectionService = game:GetService('CollectionService')
 -- Generating 4x4 tile map
 for x = 1, 4 do
     for z = 1, 4 do
+        
+        -- generate the tilemap and present it in the workspace
         local tile = Instance.new("Part")
         tile.Size = Vector3.new(4,1,4)
-        -- tile.Name = "Tile"..tostring(x..z)
+        tile.Name = "Tile"..tostring(x..z)
         tile.Name = "Tile"
         tile.Position = Vector3.new(tile.Size.X * x, 4, tile.Size.Z * z)
         tile.Anchored = true
+
+        -- tag the tile with the "Tile" tag
         CollectionService:AddTag(tile, "Tile")
         tile.Parent = workspace
     end
