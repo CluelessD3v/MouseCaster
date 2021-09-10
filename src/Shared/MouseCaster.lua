@@ -1,4 +1,3 @@
--------------------- Services --------------------
 local UserInputService = game:GetService('UserInputService')
 local CollectionService = game:GetService('CollectionService')
 
@@ -10,7 +9,7 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
     local self = setmetatable({}, MouseCaster)
     self.Camera = workspace.CurrentCamera
     self.DistanceScalar = distanceScalar or 1000
-
+    self.FilteredTags = {}
     self.RayCastParams = RaycastParams.new()
     self.RayCastParams.FilterType = filterType or Enum.RaycastFilterType.Blacklist
     self.RayCastParams.FilterDescendantsInstances = filteredInstancesList or {}
@@ -30,8 +29,8 @@ end
 
 -------------------- Public Methods --------------------
 --> Small debug function to make sure the list is actually being updated, not like you cannot know by testing 
-function MouseCaster:PrintFilterList()
-    print(self.RayCastParams.FilterDescendantsInstances) 
+function MouseCaster:GetFilterList()
+    return self.RayCastParams.FilterDescendantsInstances 
 end
 
 --> functional way to set the ray cast filter type
@@ -63,27 +62,29 @@ end
 -- --> Updates RayCastParams.FilterDescendantsInstances w/o overwriting previous values IGNORE DUPLICATES!
 function MouseCaster:UpdateTargetFilter(newInclusionList:table)
     local currentFilterList = self.RayCastParams.FilterDescendantsInstances
-
+    
     for _, newInstance in ipairs(newInclusionList) do
         if table.find(currentFilterList, newInstance) then continue end
         table.insert(currentFilterList, newInstance)
     end
 
+
     self.RayCastParams.FilterDescendantsInstances = currentFilterList 
 end
 
 --> Updates the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values. IGNORE DUPLICATES!
-function MouseCaster:UpdateTargetFilterFromTags(tagsTable:table)
+function MouseCaster:UpdateTargetFilterFromTags()
     local currentFilterList = self.RayCastParams.FilterDescendantsInstances
+    table.clear(currentFilterList)
 
-    for _, tag in ipairs(tagsTable) do
+    for _, tag in ipairs(self.FilteredTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(tag)) do
-            if table.find(currentFilterList, taggedInstance) then continue end
             table.insert(currentFilterList, taggedInstance)
         end 
     end
 
     self.RayCastParams.FilterDescendantsInstances = currentFilterList 
+
 end
 
 --> returns Raycast result (if any)
@@ -92,5 +93,6 @@ function MouseCaster:GetRaycastResult()
     return workspace:Raycast(UnitRay.Origin, UnitRay.Direction *  self.DistanceScalar, self.RayCastParams)
 end
     
+
 
 return MouseCaster
