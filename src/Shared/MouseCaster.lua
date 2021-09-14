@@ -30,6 +30,10 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
     return self
 end
 
+
+--//TOOD REWRITE THIS SO IT WORKS BOTH WITH NON TAGGED AND TAGGED INSTANCES.
+
+
 -------------------- Public Methods --------------------
 --> Small debug function to make sure the list is actually being updated, not like you cannot know by testing 
 function MouseCaster:GetFilterList()
@@ -122,3 +126,4 @@ end
 
 
 return MouseCaster
+

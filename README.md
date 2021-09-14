@@ -34,14 +34,13 @@ Now, that said, I am not at all trying to make my own Mouse Wrapper, which takes
 <br>
 
 ## Disclaimer 
-I wrote this module with a very specific use case in mind, which is current project, a tile based RTS, I needed a ray cast function that allowed me to Ignore everything but Tiles. hence why this is not an attempt of a new Mouse API in roids (but it can very well end up being that, it all depends in the needs of my game) or something like that, I don’t think I’m nearly as good of a scripter to pull that off, if you need a full fledged mouse module, here are some options I found to be great:
+I wrote this module with a very specific use case in mind, which is current project, a tile based RTS, I needed a ray cast function that allowed me to Ignore everything but Tiles. hence why this is not an attempt of a new Mouse API in roids (but it can very well end up being that, it all depends in the needs of my game) I don’t think I’m nearly as good of a scripter to pull that off, and to be clear, please consider the following: 
 
-## Disclaimer 2
-As Off 09/10/21 (DD/MM/YY) the API was re-written so update methods are not as **criminally slow** as they were. there should
-not be any incompatible changes but if you spot one be sure to let me know.
+*the module can change at any time depending in my project needs, if something is not working or just does not fly with me I will just delete it, there is no proper changelog and updates are not planned, they just come as I develop, I just made the the repo public cause maybe someone could find it useful*
+<br>
 
+if you need a full fledged mouse module, here are some options I found to be great:
 
-**This Module is actively in development as I add features to my game, but right now is very uncooked.**
 
 <br>
 
@@ -54,6 +53,10 @@ I decided to make my own because current available modules intend to be either a
 
 Both, in my opinion are great Player Mouse alternatives.
 
+
+## Disclaimer 2
+As Off 09/10/21 (DD/MM/YY) the API was re-written so update methods are not as **criminally slow** as they were. there should
+not be any incompatible changes but if you spot one be sure to let me know.
 
 ## Installation
 Just copy paste the contents from the src/Shared/MouseCaster.lua into a module script. Put said module in Replicated storage.
