@@ -1,6 +1,6 @@
 # Mouse Caster
 
-Roblox Utility ray casting module specifically for the mouse. I am developing this library because I could not filter multiple instances when ray casting from the mouse with the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse)
+**Collection service based** Roblox ray casting module specifically for the mouse. I am developing this library because the existing "legacy" [mouse API](https://developer.roblox.com/en-us/api-reference/class/Mouse) is a pain to work with in my current project.
 
 Added to the above; I also think that not having a modern, convenient Mouse API is in my opinion no bueno, simple example is attempting to raycast with the mouse w/o using the legacy mouse API.
 
@@ -29,18 +29,17 @@ Although this is some simple code, it is definitely not beginner friendly (altho
 Not only that, but having to write this much code, at least in my opinion is a regression when you can just do
 `Mouse.Target` with the legacy API...
 
-Now, that said, I am not at all trying to make my own Mouse Wrapper, which takes us to.
+That said, I am not at all trying to make my own Mouse Wrapper, which takes us to.
 
 <br>
 
 ## Disclaimer 
-I wrote this module with a very specific use case in mind, which is current project, a tile based RTS, I needed a ray cast function that allowed me to Ignore everything but Tiles. hence why this is not an attempt of a new Mouse API in roids (but it can very well end up being that, it all depends in the needs of my game) I don’t think I’m nearly as good of a scripter to pull that off, and to be clear, please consider the following: 
+I wrote this module with a very specific use case in mind: Casting a ray from the mouse, and rapidly determine if an instance should be ignored or returned. This is achieved by checking if an instance is tagged with a collection service tag that should be ignored. 
 
 *the module can change at any time depending in my project needs, if something is not working or just does not fly with me I will just delete it, there is no proper changelog and updates are not planned, they just come as I develop, I just made the the repo public cause maybe someone could find it useful*
 <br>
 
 if you need a full fledged mouse module, here are some options I found to be great:
-
 
 <br>
 
@@ -53,11 +52,6 @@ I decided to make my own because current available modules intend to be either a
 
 Both, in my opinion are great Player Mouse alternatives.
 
-
-## Disclaimer 2
-As Off 09/10/21 (DD/MM/YY) the API was re-written so update methods are not as **criminally slow** as they were. there should
-not be any incompatible changes but if you spot one be sure to let me know.
-
 ## Installation
 Just copy paste the contents from the src/Shared/MouseCaster.lua into a module script. Put said module in Replicated storage.
 
@@ -65,30 +59,21 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 
 ## Current Capabilities
 - Raycast from the mouse using ScreenPointToRay (ignores Gui Inset)
-- Capable of filtering either multiple or single instances
-- Support for CollectionService tags, mass filter tagged instances (this is off course, more expensive, but useful for lazy devs like me that cannot even reference Collection service, LOL)
+- Capable of multiple instances at once.
+- Coded specifically to work with Collection Service. instead of ignoring specific instances, it ignore tags; therefore the Ray cast function will ignore any instance with the given tags.
 - Mimics legacy Mouse API: Call MouseCaster.Target() to ray cast
-
-<br>
-
-## TODO
-- Add error throwing
-- Add debug methods?
-- Add method to remove instances from the target filter
-- Add more examples to API
+- Extremely easy to use.
 
 <br>
 
 ## API
 
 ### Properties
-`Camera: Camera` Reference to the workspace current camera
+`Camera: Camera` Reference to the workspace current camera.
 
-`DistanceScalar: number` Max distance the ray can travel in studs, defaults to 1000
+`DistanceScalar: number` Max distance the ray can travel in studs, defaults to 1000.
 
-
-`RayCastParams: function`  RayCastParams object
-
+`FilteredTags: table` the list tags the caster will check for to determine if an instance is ignored or returned by the ray cast function.
 
 `Target(): Instance` Identical to Mouse.Target in functionality, shoots a ray using Workspace:Raycast() and returns whatever **Instance** it intercepts, the max distance set by the DistanceScalar property. **MUST CALL AS**: **MouseCaster.Target()** else it will error.
 
@@ -99,9 +84,26 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 `new(distanceScalar?:number filteredTags?: table): MouseCaster`
 
 Constructs a new MouseCaster object, accepts **two** optional parameters:
-- The Max distance the ray can travel in studs
-- A table of instances to filter, *defaults to an empty table*
+- The Max distance the ray can travel in studs, *defaults to 1000 studs*
+- A table of tags to filter, *defaults to an empty table*
 
+<br>
+
+`SetFilteredTags(filteredTagsTable:table)`: void
+
+Sets the Filtered Tags list to the given table, if there was an existing one, then it will overwrite it.
+
+<br>
+
+`UpdatedFilteredTags(newTagsTable:table)`: void
+
+Updates the FilteredTags list w/o overwriting existing values, it skip duplicates
+
+<br>
+
+`RemoveFilteredTag(RemovedTagsTable:table)`: void
+
+Removes the given tags from the Filtered Tags list
 
 <br>
 
@@ -109,11 +111,12 @@ Constructs a new MouseCaster object, accepts **two** optional parameters:
 
 **assuming you have Mouse caster installed in replicated storage, you can just copy paste these examples and they will work out of the box**
 
-## Simple, constant ray casting from the mouse that ignores **EVERYTHING BUT THE BasePlate**, 
+## Simple, constant ray casting from the mouse that ignores any object tagged with the "Ignored" tag 
 ```lua
 local RunService = game:GetService('RunService')
+
 local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
-local newMouseCaster = MouseCaster.new(1500, Enum.RaycastFilterType.Whitelist, {workspace.Baseplate})
+local newMouseCaster = MouseCaster.new(1500, {"Ignored"}) 
 
 RunService.Heartbeat:Connect(function()
     print(newMouseCaster.Target())
@@ -122,7 +125,7 @@ end)
 ## Pseudo RTS tile based map example in which assets are spawned on top of tiles, EVERYTHING BUT THE TILES are ignored by the ray cast in this example
 
 ```lua
--- Server
+-- Server Script
 local CollectionService = game:GetService('CollectionService')
 
 
@@ -162,28 +165,37 @@ end
 -- Local script
 local RunService = game:GetService('RunService')
 local MouseCaster = require(game.ReplicatedStorage.MouseCaster)
+
+-- Create a new mousecaster instance.
 local newMouseCaster = MouseCaster.new(1500)
-local localPlayer = game:GetService('Players').LocalPlayer
+newMouseCaster.SetFilteredTags({"Prop"})
 
--- show casing usage of filtering API: note that you can combine both CS and regular filter methods w/o problem
-
--- Adding default scene instances and character to the target filter
-newMouseCaster:SetTargetFilter({workspace.Baseplate, workspace.SpawnLocation, localPlayer.Character }) 
-newMouseCaster:UpdateTargetFilterFromTags({"Prop"}) --> ignoring props so only tiles are detected
-
--- Will ignore everything but the tiles
+local count = 0
 RunService.Heartbeat:Connect(function()
     print(newMouseCaster.Target())
+
+    count += 1
+    -- when the count reaches 150, then the props will no longer be ignored.
+    if count >= 150 then
+        newMouseCaster:RemoveFilteredTag({"Prop"})
+    end
+
 end)
 
-```
 
-While I come up with more examples, keep in mind that most methods are just filter methods that behave exactly like  `self.RayCastParams.FilterDescendantsInstances`, just pass a table of instances to the filter methods and you are set
+
+```
+<br>
+
+## TODO
+- Add error throwing
+- Add debug methods?
+- Add more/better examples to doc?
 
 <br>
 
 ## Credits
-Credit to discord user Bearosama, he wrote the current Update methods implementation, mine was a hot mess.
+Credit to discord user Bearosama, he helped writing now removed code of the module.
 
 ## Contact info: 
 Discord: CluelessDev(Quique)#5459
