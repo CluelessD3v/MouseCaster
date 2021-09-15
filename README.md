@@ -96,57 +96,12 @@ Just copy paste the contents from the src/Shared/MouseCaster.lua into a module s
 
 ### Methods
 
-`new(filterType?: Enum.RaycastFilterType, filteredInstancesList?: table): MouseCaster`
+`new(distanceScalar?:number filteredTags?: table): MouseCaster`
 
 Constructs a new MouseCaster object, accepts **two** optional parameters:
-- The ray cast filter type, either blacklist or whitelist, *defaults to blacklist*
+- The Max distance the ray can travel in studs
 - A table of instances to filter, *defaults to an empty table*
 
-<br>
-
-`SetFilterType(filterType: Enum.RayCastFilterType): void`
-
-functional way to set the ray cast filter type, again either:
-- blacklist
-- whitelist
-
-<br>
-
-`SetTargetFilter(filteredInstancesList: table): void`
-
-functional way to set the Filter descendants list, **calling this on an existing filter list will overwrite it**.
-
-<br>
-
-`UpdateTargetFilter(newInclusionList:table): void`
-
-Updates MouseCaster object RayCastParams.FilterDescendantsInstances w/o overwriting previous values, **this method ignores duplicated values Automatically**
-
-<br>
-
-`GetRaycastResult(theCurrentCamera: Camera, distanceScalar?: number): RaycastResult`
-
-Ray casting function, shoots a ray from the mouse position into a set distance, returns whatever it intercepted if anything.
-*The distance scalar defaults to 1000 studs if not set*, this method **ignores the gui inset!** since it uses ScreenPointToRay to
-get mouse location.
-
-<br>
-
-### CollectionService oriented methods
-
-NOTE: *you can mimic these methods by spam calling UpdateTargetFilter() and passing CollectionService:GetTagged() tables to it.* **also; table values must be strings for these methods!**
-
-
-`SetTargetFilterFromTags(tagsList: table)`
-
-Adds all instances with the given tags of the tag list in the ray cast filter, calling this on an existing filter list will overwrite it. 
-
-<br>
-
-`UpdateTargetFilterFromTags(): void`
-
-Adds all instances with the given tags of the tag list into the ray cast filter w/o overwriting previous values
-**this method ignores duplicated values Automatically**
 
 <br>
 

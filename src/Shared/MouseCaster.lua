@@ -5,24 +5,28 @@ local CollectionService = game:GetService('CollectionService')
 local MouseCaster = {} 
 MouseCaster.__index = MouseCaster
 
-function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesList: table)
+function MouseCaster.new(distanceScalar: number, filteredTags: table)
     local self = setmetatable({}, MouseCaster)
     self.Camera = workspace.CurrentCamera
-    self.DistanceScalar = distanceScalar or 1000
-    
-    self.RayCastParams = RaycastParams.new()
-    self.RayCastParams.FilterType = filterType or Enum.RaycastFilterType.Blacklist
-    self.RayCastParams.FilterDescendantsInstances = filteredInstancesList or {}
-    
-    --Filters
-    self.FilteredTags = {}
-    self.NonTaggedFilteredInstances = {}
+    self.DistanceScalar = distanceScalar or 1000    
+    self.FilteredTags = filteredTags or {}
 
     self.Target = function()
         local UnitRay = self.Camera:ScreenPointToRay(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
         distanceScalar = distanceScalar or 1000
         local target = workspace:Raycast(UnitRay.Origin, UnitRay.Direction *  self.DistanceScalar, self.RayCastParams)
+
         if target then
+            local targetTagsList = CollectionService:GetTags(target.Instance)
+            
+            -- check if the target has a filtered tag
+            for _, targetTag in ipairs(targetTagsList) do
+                if table.find(self.FilteredTags, targetTag) then
+                    return
+                end
+            end
+            
+            -- no filtered tag? return me the instance
             return target.Instance
         end
     end
@@ -30,99 +34,44 @@ function MouseCaster.new(distanceScalar: number, filterType, filteredInstancesLi
     return self
 end
 
+-------------------- Public routines ------------------
 
---//TOOD REWRITE THIS SO IT WORKS BOTH WITH NON TAGGED AND TAGGED INSTANCES.
-
-
--------------------- Public Methods --------------------
---> Small debug function to make sure the list is actually being updated, not like you cannot know by testing 
-function MouseCaster:GetFilterList()
-    return self.RayCastParams.FilterDescendantsInstances 
+-- Sets the Filtered Tags list to the given table, if there was an existing one, then it will overwrite it.
+function MouseCaster:SetFilteredTags(filteredTagsTable:table)
+    self.FilteredTags = filteredTagsTable
 end
 
---> functional way to set the ray cast filter type
-function MouseCaster:SetFilterType(aFilterType)
-    self.RayCastParams.FilterType = aFilterType
-end
+-- Updates the FilteredTags list w/o overwriting existing values, it skip duplicates
+function MouseCaster:UpdatedFilteredTags(newTagsTable:table)
+    for _, tag in ipairs(newTagsTable) do
+        local duplicatedTag = table.find(self.FilteredTags, tag)
 
--------------------- Setter Methods ------------------
---> functional way to set the Filter descendants list, calling this on an existing filter list will overwrite it.
-function MouseCaster:SetTargetFilter(filterList: table)
-    self.NonTaggedFilteredInstances = filterList
-    self.RayCastParams.FilterDescendantsInstances = filterList
-end
-
---> Adds all instances with the given tags of the tag list in the ray cast filter, calling this on an existing filter list will overwrite it.
-function MouseCaster:SetTargetFilterFromTags(taglist: table)
-    local filterList = {}
-    self.FilteredTags = taglist
-
-    
-    for _, tag in ipairs(self.FilteredTags) do
-        local taggedInstances = CollectionService:GetTagged(tag)
-
-        for _, instance in ipairs(taggedInstances) do
-            table.insert(filterList, instance)
+        -- the tag is already being filtered? then skip it to avoid duplicates
+        if duplicatedTag then 
+            warn(tag, "tag is already being filtered") 
+            continue
+        else
+            table.insert(self.FilteredTags, tag)
         end
     end
-
-    self.RayCastParams.FilterDescendantsInstances = filterList
-    
 end
 
--------------------- Update Methods ------------------
+-- removes the given tags from the Filtered Tags list
+function MouseCaster:RemoveFilteredTag(RemovedTagsTable:table)
+    for _, tagToRemove in ipairs(RemovedTagsTable) do
+        local removedTag = table.find(self.FilteredTags, tagToRemove)
 
--- --> Updates RayCastParams.FilterDescendantsInstances w/o overwriting previous values IGNORE DUPLICATES!
-function MouseCaster:UpdateTargetFilter(newInclusionList:table)
-    local currentFilterList = self.RayCastParams.FilterDescendantsInstances
+        -- the tag is not in the filtered tags list? Then probably a typo was made, warn and skip it
 
-    table.clear(self.RayCastParams.FilterDescendantsInstances)
-
-    for _, newInstance in ipairs(newInclusionList) do
-        table.insert(currentFilterList, newInstance)
-
-        if #CollectionService:GetTags(newInstance) < 1 then 
-            table.insert(self.NonTaggedFilteredInstances, newInstance)
+        if removedTag == nil then 
+            warn("Tag was not found!")
+            continue
+        else
+            self.FilteredTags[removedTag] = nil
         end
-    end
-
-    self.RayCastParams.FilterDescendantsInstances = currentFilterList 
-end
-
---> Updates the instance filter by Adding all instances with the given tags of the tag list in the ray cast filter w/o overwriting previous values. IGNORE DUPLICATES!
-function MouseCaster:UpdateTargetFilterFromTags(filteredTagsList:table)
-    local currentFilterList = self.RayCastParams.FilterDescendantsInstances
-
-    -- clear the filtered descendants list to avoid duplicates
-    table.clear(self.RayCastParams.FilterDescendantsInstances)
-
-    for _, tag in ipairs(filteredTagsList) do
-        -- is the tag already in the filtered tags list? then continue, avoids duplicates
-        if table.find(self.FilteredTags, tag) then continue end
-
-        -- is not the in the filtered tags list? then add it
-        table.insert(self.FilteredTags, tag)
-        
-        -- add all the tagged instances
-        for _, taggedInstance in ipairs(CollectionService:GetTagged(tag)) do
-            table.insert(currentFilterList, taggedInstance)
-        end 
-    end
-
-    for _, instance in ipairs(self.NonTaggedFilteredInstances) do
-        table.insert(currentFilterList, instance)
-    end
-
-    self.RayCastParams.FilterDescendantsInstances = currentFilterList 
-
-end
-
---> returns Raycast result (if any)
-function MouseCaster:GetRaycastResult()
-    local UnitRay = self.Camera:ScreenPointToRay(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
-    return workspace:Raycast(UnitRay.Origin, UnitRay.Direction *  self.DistanceScalar, self.RayCastParams)
-end
+    end 
     
+end
 
 
 return MouseCaster
